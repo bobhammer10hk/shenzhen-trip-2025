@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>深圳一日遊 - 12月15日</title>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #F9F9F7; /* Washi paper off-white */
+            --card-bg: #FFFFFF;
+            --text-primary: #2C2C2C;
+            --text-secondary: #666666;
+            --accent-color: #D4A373; /* Soft wood tone */
+            --tag-food: #E6B8B8; /* Muted pink */
+            --tag-spot: #B8D8E6; /* Muted blue */
+            --tag-transport: #D8E6B8; /* Muted green */
+            --shadow: 0 4px 12px rgba(0,0,0,0.05);
+            --radius: 16px;
+        }
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            margin: 0;
+            padding: 0;
+            padding-bottom: 80px; /* Space for bottom nav */
+        }
+
+        /* Header & Weather */
+        header {
+            padding: 20px;
+            background: var(--card-bg);
+            border-bottom-left-radius: 24px;
+            border-bottom-right-radius: 24px;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .header-top { display: flex; justify-content: space-between; align-items: center; }
+        h1 { font-size: 24px; margin: 0; font-weight: 600; letter-spacing: -0.5px; }
+        .date-badge { background: var(--text-primary); color: white; padding: 4px 12px; border-radius: 20px; font-size: 12px; }
+        
+        .weather-widget {
+            margin-top: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+        .weather-icon { font-size: 20px; color: var(--accent-color); }
+
+        /* Main Content */
+        .container { padding: 20px; max-width: 600px; margin: 0 auto; }
+        
+        /* Tabs */
+        .tabs { display: flex; gap: 15px; margin-bottom: 20px; overflow-x: auto; padding-bottom: 5px; }
+        .tab-btn {
+            border: none;
+            background: none;
+            font-size: 16px;
+            color: var(--text-secondary);
+            padding: 8px 0;
+            cursor: pointer;
+            position: relative;
+            white-space: nowrap;
+        }
+        .tab-btn.active { color: var(--text-primary); font-weight: 600; }
+        .tab-btn.active::after {
+            content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 2px; background: var(--accent-color);
+        }
+
+        /* Cards */
+        .card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 20px;
+            margin-bottom: 16px;
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(0,0,0,0.02);
+            transition: transform 0.2s;
+        }
+        .card:active { transform: scale(0.98); }
+        
+        .card-header { display: flex; justify-content: space-between; margin-bottom: 10px; }
+        .time { font-weight: 700; font-size: 18px; color: var(--accent-color); }
+        .category-icon { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; }
+        
+        .cat-food { background: var(--tag-food); color: #8B4444; }
+        .cat-spot { background: var(--tag-spot); color: #446B8B; }
+        .cat-transport { background: var(--tag-transport); color: #5F8B44; }
+
+        .card-title { font-size: 18px; font-weight: 600; margin-bottom: 8px; }
+        .card-desc { font-size: 14px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 15px; }
+
+        /* Tags */
+        .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 15px; }
+        .tag { font-size: 11px; padding: 4px 8px; border-radius: 4px; font-weight: 600; }
+        .tag-must-eat { background: #FFF0F0; color: #D32F2F; border: 1px solid #FFCDCD; }
+        .tag-tips { background: #F0F7FF; color: #1976D2; border: 1px solid #CDE5FF; }
+
+        /* Action Buttons */
+        .actions { display: flex; gap: 10px; }
+        .btn {
+            flex: 1;
+            padding: 10px;
+            border-radius: 8px;
+            border: none;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            text-decoration: none;
+        }
+        .btn-nav { background: var(--text-primary); color: white; }
+        .btn-info { background: #F0F0F0; color: var(--text-primary); }
+
+        /* Tools Section */
+        .tool-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .tool-card { background: var(--card-bg); padding: 20px; border-radius: var(--radius); text-align: center; box-shadow: var(--shadow); }
+        .tool-icon { font-size: 24px; margin-bottom: 10px; color: var(--accent-color); }
+        
+        /* Expense Tracker */
+        .expense-list { margin-top: 20px; }
+        .expense-item { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #eee; font-size: 14px; }
+        .expense-input-group { display: flex; gap: 10px; margin-bottom: 15px; }
+        .expense-input { flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 8px; }
+
+        /* Bottom Nav */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: space-around;
+            padding: 12px 0;
+            border-top: 1px solid rgba(0,0,0,0.05);
+            z-index: 1000;
+        }
+        .nav-item {
+            text-align: center;
+            color: #999;
+            font-size: 10px;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+        .nav-item.active { color: var(--text-primary); }
+        .nav-item i { font-size: 20px; margin-bottom: 4px; display: block; }
+
+        /* Sections */
+        .section { display: none; }
+        .section.active { display: block; }
+
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <div class="header-top">
+            <h1>深圳一日遊</h1>
+            <span class="date-badge">12月15日 (日)</span>
+        </div>
+        <div class="weather-widget">
+            <i class="fas fa-cloud-sun weather-icon"></i>
+            <span>深圳 18°C - 24°C | 晴時多雲</span>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        
+        <!-- Itinerary Section -->
+        <div id="itinerary" class="section active">
+            <div class="tabs">
+                <button class="tab-btn active">全部</button>
+                <button class="tab-btn">上午</button>
+                <button class="tab-btn">下午</button>
+                <button class="tab-btn">晚上</button>
+            </div>
+
+            <!-- Morning -->
+            <div class="card">
+                <div class="card-header">
+                    <span class="time">09:30</span>
+                    <div class="category-icon cat-transport"><i class="fas fa-train"></i></div>
+                </div>
+                <div class="card-title">抵達福田口岸</div>
+                <div class="card-desc">過關後直接搭乘地鐵4號線。建議預先準備好支付寶/微信乘車碼。</div>
+                <div class="tags">
+                    <span class="tag tag-tips">Tips: 記得開漫遊</span>
+                </div>
+                <div class="actions">
+                    <a href="https://maps.google.com/?q=福田口岸" target="_blank" class="btn btn-nav"><i class="fas fa-location-arrow"></i> 導航</a>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <span class="time">10:30</span>
+                    <div class="category-icon cat-spot"><i class="fas fa-tree"></i></div>
+                </div>
+                <div class="card-title">蓮花山公園</div>
+                <div class="card-desc">適合小朋友放電，可以放風箏。山頂廣場可以俯瞰深圳市民中心全景。</div>
+                <div class="tags">
+                    <span class="tag tag-tips">攻略: 帶野餐墊</span>
+                    <span class="tag tag-spot">拍照熱點</span>
+                </div>
+                <div class="actions">
+                    <a href="https://maps.google.com/?q=蓮花山公園" target="_blank" class="btn btn-nav"><i class="fas fa-location-arrow"></i> 導航</a>
+                    <button class="btn btn-info"><i class="fas fa-info-circle"></i> 詳情</button>
+                </div>
+            </div>
+
+            <!-- Lunch -->
+            <div class="card">
+                <div class="card-header">
+                    <span class="time">12:30</span>
+                    <div class="category-icon cat-food"><i class="fas fa-utensils"></i></div>
+                </div>
+                <div class="card-title">卓悅中心 One Avenue</div>
+                <div class="card-desc">午餐推薦：<b>陶陶居</b> 或 <b>蔡瀾港式點心</b>。商場很大，有很多裝置藝術適合小朋友拍照。</div>
+                <div class="tags">
+                    <span class="tag tag-must-eat">必吃: 冰鎮咕嚕肉</span>
+                    <span class="tag tag-must-eat">必點: 酥皮叉燒包</span>
+                    <span class="tag tag-tips">預約代號: A203</span>
+                </div>
+                <div class="actions">
+                    <a href="https://maps.google.com/?q=卓悅中心" target="_blank" class="btn btn-nav"><i class="fas fa-location-arrow"></i> 導航</a>
+                </div>
+            </div>
+
+            <!-- Afternoon -->
+            <div class="card">
+                <div class="card-header">
+                    <span class="time">15:00</span>
+                    <div class="category-icon cat-spot"><i class="fas fa-child"></i></div>
+                </div>
+                <div class="card-title">Meland Club (壹方城店)</div>
+                <div class="card-desc">室內大型遊樂場，號稱親子界愛馬仕。小朋友可以玩2-3小時。</div>
+                <div class="tags">
+                    <span class="tag tag-tips">記得帶防滑襪</span>
+                </div>
+                <div class="actions">
+                    <a href="https://maps.google.com/?q=壹方城" target="_blank" class="btn btn-nav"><i class="fas fa-location-arrow"></i> 導航</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tools Section -->
+        <div id="tools" class="section">
+            <h2 style="font-size: 20px; margin-bottom: 20px;">實用工具</h2>
+            
+            <div class="tool-grid">
+                <div class="tool-card">
+                    <div class="tool-icon"><i class="fas fa-phone-alt"></i></div>
+                    <div style="font-weight:600">緊急聯絡</div>
+                    <div style="font-size:12px; color:#666; margin-top:5px;">公安: 110<br>急救: 120</div>
+                </div>
+                <div class="tool-card">
+                    <div class="tool-icon"><i class="fas fa-subway"></i></div>
+                    <div style="font-weight:600">地鐵圖</div>
+                    <div style="font-size:12px; color:#666; margin-top:5px;">點擊查看</div>
+                </div>
+            </div>
+
+            <h3 style="margin-top: 30px;">記帳 / 預算 (離線版)</h3>
+            <div style="background: white; padding: 20px; border-radius: 16px; box-shadow: var(--shadow);">
+                <div class="expense-input-group">
+                    <input type="text" id="expenseName" class="expense-input" placeholder="項目 (如: 午餐)">
+                    <input type="number" id="expenseAmount" class="expense-input" placeholder="金額 (RMB)">
+                </div>
+                <button onclick="addExpense()" class="btn btn-nav" style="width:100%">新增支出</button>
+                
+                <div class="expense-list" id="expenseList">
+                    <!-- JS will populate this -->
+                </div>
+                <div style="margin-top: 15px; text-align: right; font-weight: 700;">
+                    總計: ¥<span id="totalAmount">0</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <button class="nav-item active" onclick="switchTab('itinerary', this)">
+            <i class="fas fa-map-marked-alt"></i>
+            行程
+        </button>
+        <button class="nav-item" onclick="switchTab('tools', this)">
+            <i class="fas fa-briefcase"></i>
+            工具箱
+        </button>
+    </nav>
+
+    <script>
+        // Simple Tab Switching
+        function switchTab(sectionId, btn) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(el => el.classList.remove('active'));
+            // Show target section
+            document.getElementById(sectionId).classList.add('active');
+            
+            // Update nav buttons
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            btn.classList.add('active');
+        }
+
+        // Offline Expense Tracker Logic
+        let expenses = JSON.parse(localStorage.getItem('sz_trip_expenses')) || [];
+
+        function renderExpenses() {
+            const list = document.getElementById('expenseList');
+            const totalEl = document.getElementById('totalAmount');
+            list.innerHTML = '';
+            let total = 0;
+
+            expenses.forEach((exp, index) => {
+                total += parseFloat(exp.amount);
+                const item = document.createElement('div');
+                item.className = 'expense-item';
+                item.innerHTML = `
+                    <span>${exp.name}</span>
+                    <span>¥${exp.amount} <i class="fas fa-trash" style="margin-left:10px; color:#ff6b6b; cursor:pointer;" onclick="deleteExpense(${index})"></i></span>
+                `;
+                list.appendChild(item);
+            });
+            totalEl.innerText = total.toFixed(2);
+        }
+
+        function addExpense() {
+            const name = document.getElementById('expenseName').value;
+            const amount = document.getElementById('expenseAmount').value;
+            
+            if(name && amount) {
+                expenses.push({ name, amount });
+                localStorage.setItem('sz_trip_expenses', JSON.stringify(expenses));
+                renderExpenses();
+                document.getElementById('expenseName').value = '';
+                document.getElementById('expenseAmount').value = '';
+            }
+        }
+
+        function deleteExpense(index) {
+            expenses.splice(index, 1);
+            localStorage.setItem('sz_trip_expenses', JSON.stringify(expenses));
+            renderExpenses();
+        }
+
+        // Initial Render
+        renderExpenses();
+    </script>
+</body>
+</html>
